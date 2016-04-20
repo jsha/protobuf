@@ -40,6 +40,7 @@ import (
 	"bufio"
 	"bytes"
 	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"go/parser"
 	"go/printer"
@@ -2602,6 +2603,8 @@ func (g *Generator) generateFileDescriptor(file *FileDescriptor) {
 	// TODO: Trim this more when we know exactly what we need.
 	pb := proto.Clone(file.FileDescriptorProto).(*descriptor.FileDescriptorProto)
 	pb.SourceCodeInfo = nil
+	x, _ := json.MarshalIndent(pb, "", "  ")
+	fmt.Fprintf(os.Stderr, "pb: %s\n", string(x))
 
 	b, err := proto.Marshal(pb)
 	if err != nil {
